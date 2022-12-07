@@ -1,3 +1,4 @@
+# 1.时间
 ``` SQL
 -- 查询上月一号
 SELECT DATEADD(DAY, -DAY(DATEADD(MONTH, -1, GETDATE())) + 1, DATEADD(MONTH, -1, GETDATE()))
@@ -13,4 +14,33 @@ SELECT DATEADD(DAY, -DAY(DATEADD(MONTH, 1, GETDATE())) + 1, DATEADD(MONTH, 1, GE
 SELECT DATEADD(DAY, -DAY(DATEADD(MONTH, 2, GETDATE())), DATEADD(MONTH, 2, GETDATE()))
 -- 时间转字符串
 SELECT CONVERT(VARCHAR(7), GETDATE(), 120)
+```
+
+# 2.自连接
+``` SQL
+-- 自连接表格查询所有子级(前面的;不能少)
+;WITH NewTable AS
+(
+		SELECT A.ID, A.ParentID FROM table_name AS A WHERE A.ID = 166
+		UNION ALL
+		SELECT A.ID, A.ParentID FROM table_name AS A INNER JOIN NewTable AS B ON B.ID = A.ParentID
+)
+```
+
+# 3.分页
+``` SQL
+-- 方法一
+SELECT * FROM table_name AS A WHERE 1 = 1 ORDER BY column DESC OFFSET 0 ROWS FETCH NEXT 20 ROWS ONLY
+
+-- 方法二
+SELECT * FROM (
+		SELECT ROW_NUMBER() OVER(ORDER BY column DESC) AS RowNo FROM table_name AS A WHERE 1 = 1
+) AS A WHERE A.RowNo BETWEEN 1 AND 20
+```
+
+# 4.分组
+``` SQL
+SELECT * FROM (
+		SELECT ROW_NUMBER() OVER(PARTITION BY column ORDER BY column DESC ) AS RowNo FROM table_name AS A	WHERE 1 = 1
+) AS A WHERE A.RowNo = 1
 ```
