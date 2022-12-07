@@ -19,11 +19,10 @@ SELECT CONVERT(VARCHAR(7), GETDATE(), 120)
 # 2.自连接
 ``` SQL
 -- 自连接表格查询所有子级(前面的;不能少)
-;WITH NewTable AS
-(
-		SELECT A.ID, A.ParentID FROM table_name AS A WHERE A.ID = 166
-		UNION ALL
-		SELECT A.ID, A.ParentID FROM table_name AS A INNER JOIN NewTable AS B ON B.ID = A.ParentID
+;WITH NewTable AS (
+    SELECT A.ID, A.ParentID FROM table_name AS A WHERE A.ID = 166
+    UNION ALL
+    SELECT A.ID, A.ParentID FROM table_name AS A INNER JOIN NewTable AS B ON B.ID = A.ParentID
 )
 ```
 
@@ -34,13 +33,13 @@ SELECT * FROM table_name AS A WHERE 1 = 1 ORDER BY column DESC OFFSET 0 ROWS FET
 
 -- 方法二
 SELECT * FROM (
-		SELECT ROW_NUMBER() OVER(ORDER BY column DESC) AS RowNo FROM table_name AS A WHERE 1 = 1
+    SELECT ROW_NUMBER() OVER(ORDER BY column DESC) AS RowNo FROM table_name AS A WHERE 1 = 1
 ) AS A WHERE A.RowNo BETWEEN 1 AND 20
 ```
 
 # 4.分组
 ``` SQL
 SELECT * FROM (
-		SELECT ROW_NUMBER() OVER(PARTITION BY column ORDER BY column DESC ) AS RowNo FROM table_name AS A	WHERE 1 = 1
+    SELECT ROW_NUMBER() OVER(PARTITION BY column ORDER BY column DESC ) AS RowNo FROM table_name AS A	WHERE 1 = 1
 ) AS A WHERE A.RowNo = 1
 ```
