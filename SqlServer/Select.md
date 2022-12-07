@@ -40,6 +40,6 @@ SELECT * FROM (
 # 4.分组
 ``` SQL
 SELECT * FROM (
-    SELECT ROW_NUMBER() OVER(PARTITION BY column ORDER BY column DESC ) AS RowNo FROM table_name AS A	WHERE 1 = 1
+    SELECT ROW_NUMBER() OVER(PARTITION BY column ORDER BY column DESC ) AS RowNo FROM table_name AS A WHERE 1 = 1
 ) AS A WHERE A.RowNo = 1
 ```
